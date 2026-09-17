@@ -89,6 +89,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
       - name: tf-setup
         uses: ./.github/actions/tf-setup
         with:
@@ -110,6 +113,9 @@ jobs:
       contents: read
       pull-requests: write
     steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
       - name: tf-setup
         uses: ./.github/actions/tf-setup
         with:
@@ -155,6 +161,9 @@ jobs:
       id-token: write
       contents: read
     steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
       - name: tf-setup
         uses: ./.github/actions/tf-setup
         with:
