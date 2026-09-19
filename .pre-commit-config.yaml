@@ -15,12 +15,14 @@ repos:
         args: [--fix]
       - id: ruff-format
 
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.10.0
+  - repo: local
     hooks:
       - id: mypy
-        additional_dependencies: []
-        args: [--ignore-missing-imports]
+        name: mypy
+        entry: mypy src/
+        language: system
+        pass_filenames: false
+        types: [ python ]
 
   # NOTE: no terraform_fmt / terraform_validate hooks. CI runs `pre-commit run
   # --all-files` in the `quality` job, which sets up Python only - these hooks

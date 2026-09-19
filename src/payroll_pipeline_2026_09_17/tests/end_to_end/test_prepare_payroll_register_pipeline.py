@@ -36,7 +36,7 @@ def _terminal_case_expected() -> list[dict[str, str]]:
         if case.name == "combine_regular_and_retro_pay":
             return case.expected
     raise AssertionError(
-        "no case named 'combine_regular_and_retro_pay' in transformation_cases('prepare_payroll_register')",
+        "no case named 'combine_regular_and_retro_pay' in transformation_cases('prepare_payroll_register')"  # noqa: E501
     )
 
 
@@ -64,8 +64,40 @@ _PAYROLL_REGISTER_SCHEMA: list[dict[str, str]] = [
     {"name": "rate", "type": "decimal(12,6)"},
 ]
 _PAYROLL_REGISTER_ROWS: list[tuple[Any, ...]] = [
-    ("employee_id_0", "pay_run_id_0", "pay_period_0", "pay_date_0", "run_type_0", "lohnart_code_0", "component_name_0", "gl_account_0", "cost_center_code_0", "location_code_0", "bearer_0", Decimal("1"), Decimal("1"), Decimal("1"), Decimal("1")),
-    ("employee_id_1", "pay_run_id_1", "pay_period_1", "pay_date_1", "run_type_1", "lohnart_code_1", "component_name_1", "gl_account_1", "cost_center_code_1", "location_code_1", "bearer_1", Decimal("2"), Decimal("2"), Decimal("2"), Decimal("2")),
+    (
+        "employee_id_0",
+        "pay_run_id_0",
+        "pay_period_0",
+        "pay_date_0",
+        "run_type_0",
+        "lohnart_code_0",
+        "component_name_0",
+        "gl_account_0",
+        "cost_center_code_0",
+        "location_code_0",
+        "bearer_0",
+        Decimal("1"),
+        Decimal("1"),
+        Decimal("1"),
+        Decimal("1"),
+    ),
+    (
+        "employee_id_1",
+        "pay_run_id_1",
+        "pay_period_1",
+        "pay_date_1",
+        "run_type_1",
+        "lohnart_code_1",
+        "component_name_1",
+        "gl_account_1",
+        "cost_center_code_1",
+        "location_code_1",
+        "bearer_1",
+        Decimal("2"),
+        Decimal("2"),
+        Decimal("2"),
+        Decimal("2"),
+    ),
 ]
 
 
@@ -122,7 +154,9 @@ def test_pipeline_runs_and_produces_a_well_formed_table(
         ],
     )
 
-    from payroll_pipeline_2026_09_17.jobs.prepare_payroll_register import prepare_payroll_register as job
+    from payroll_pipeline_2026_09_17.jobs.prepare_payroll_register import (
+        prepare_payroll_register as job,
+    )
 
     job.run()
 
@@ -140,9 +174,9 @@ def test_pipeline_runs_and_produces_a_well_formed_table(
     assert sink_df.count() > 0, f"sink table {sink_table} is empty"
     assert_schema_matches(sink_df.schema, _TERMINAL_SCHEMA)
 
-    assert sink_df.count() == sink_df.dropDuplicates(_UNIQUE_KEY).count(), (
-        f"grain.unique_key {_UNIQUE_KEY} is not unique in {sink_table}"
-    )
+    assert (
+        sink_df.count() == sink_df.dropDuplicates(_UNIQUE_KEY).count()
+    ), f"grain.unique_key {_UNIQUE_KEY} is not unique in {sink_table}"
 
     not_null_columns = [f.name for f in sink_df.schema.fields if not f.nullable]
     for column in not_null_columns:

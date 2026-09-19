@@ -21,14 +21,18 @@ if TYPE_CHECKING:
 
 
 @pytest.mark.unit
-@pytest.mark.parametrize("case", transformation_cases("prepare_payroll_register"), ids=lambda c: c.name)
+@pytest.mark.parametrize(
+    "case", transformation_cases("prepare_payroll_register"), ids=lambda c: c.name
+)
 def test_transformation_output_schema_matches_prediction(spark: SparkSession, case: Case) -> None:
     """Isolate one transformation: build its inputs from the *predicted* upstream schema
     (never by calling the upstream transformation), so one bad function cannot cascade a
     failure downstream. The transformations module import is deferred here rather than at
     module level so collecting this file never requires pyspark -- by the time this body
     runs, the `spark` fixture has already skipped the test if pyspark is unavailable."""
-    from payroll_pipeline_2026_09_17.jobs.prepare_payroll_register import prepare_payroll_register_transformations as T
+    from payroll_pipeline_2026_09_17.jobs.prepare_payroll_register import (
+        prepare_payroll_register_transformations as T,
+    )
 
     inputs = [empty_frame_for(spark, case.input_schemas[name]) for name in case.inputs]
     result = getattr(T, case.name)(*inputs)

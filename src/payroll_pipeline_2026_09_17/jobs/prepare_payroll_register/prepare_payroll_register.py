@@ -5,7 +5,7 @@
 
 from pyspark.sql import DataFrame
 
-from payroll_pipeline_2026_09_17.jobs.prepare_payroll_register.prepare_payroll_register_transformations import (
+from payroll_pipeline_2026_09_17.jobs.prepare_payroll_register.prepare_payroll_register_transformations import (  # noqa: E501
     cast_data_types,
     combine_regular_and_retro_pay,
     create_unique_key,
@@ -69,7 +69,9 @@ def transform(sources: dict[str, DataFrame]) -> DataFrame:
     filter_retro_runs_result = filter_retro_runs(cast_data_types_result)
     filter_regular_runs_result = filter_regular_runs(cast_data_types_result)
     sum_retro_amounts_result = sum_retro_amounts(filter_retro_runs_result)
-    join_regular_and_retro_data_result = join_regular_and_retro_data(filter_regular_runs_result, sum_retro_amounts_result)
+    join_regular_and_retro_data_result = join_regular_and_retro_data(
+        filter_regular_runs_result, sum_retro_amounts_result
+    )
     output = combine_regular_and_retro_pay(join_regular_and_retro_data_result)
     return output
 
