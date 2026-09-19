@@ -12,6 +12,14 @@ inputs:
       entirely (the credential-free `terraform validate` run).
     required: false
     default: ""
+  aws-region:
+    description: >-
+      AWS region for the assumed-role session. A composite action can't read the calling
+      workflow's `vars` context directly, so this must be passed in explicitly (the caller
+      sets it from `vars.AWS_REGION`) rather than referenced here. Ignored when aws-role
+      is empty.
+    required: false
+    default: ""
   backend:
     description: >-
       "true" initializes the real S3 backend; "false" runs init -backend=false.
@@ -26,7 +34,7 @@ runs:
       uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4.3.1
       with:
         role-to-assume: ${{ inputs.aws-role }}
-        aws-region: ${{ vars.AWS_REGION }}
+        aws-region: ${{ inputs.aws-region }}
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
       with:

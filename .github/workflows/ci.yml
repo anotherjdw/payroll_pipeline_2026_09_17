@@ -120,6 +120,7 @@ jobs:
         uses: ./.github/actions/tf-setup
         with:
           aws-role: ${{ secrets.AWS_PLAN_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
           backend: "true"
 
       - name: Terraform plan
@@ -168,6 +169,7 @@ jobs:
         uses: ./.github/actions/tf-setup
         with:
           aws-role: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
           backend: "true"
 
       - name: Download plan artifact
